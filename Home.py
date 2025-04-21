@@ -58,7 +58,7 @@ def cargar_datos(worksheet):
         st.error(f"Erro ao cargar dados: {str(e)}")
         return pd.DataFrame(columns=columnas_ordenadas)
 
-columnas_ordenadas = ['user_id', 'name', 'address','phone', 'webpage', 'rating', 'city', 'state','country', 'status']
+columnas_ordenadas = ['user_id', 'name', 'address','phone', 'website', 'rating', 'city', 'state','country', 'status']
 
 # Lista de status posibles
 status_lista = ["Novo", "Contato Feito", "Em Negociação", "Cliente", "Descartado"]
@@ -115,7 +115,7 @@ st.markdown("### Resultados")
 for index, row in filtro.iterrows():
     st.markdown(f"**{row['name']}**")
     st.markdown(f"Endereço: {row['address']}")
-    st.markdown(f"Site: [{row['webpage']}]({row['webpage']})" if row['webpage'] else "Site: N/A")
+    st.markdown(f"Site: [{row['website']}]({row['website']})" if row['website'] else "Site: N/A")
     #st.markdown(f"Avaliação: {row['rating']}")
     st.markdown(f"Cidade: {row['city']} | Estado: {row['state']} | País: {row['country']}")
 
