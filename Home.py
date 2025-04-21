@@ -51,7 +51,7 @@ def cargar_datos(worksheet):
             # Convertir los registros a DataFrame
             df = pd.DataFrame(records)
             # Asegurarse de que la columna 'user_id' sea numérica
-            df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce').fillna(0).astype(int)
+            #df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce').fillna(0).astype(int)
             return df
     except Exception as e:
         st.error(f"Erro ao cargar dados: {str(e)}")
