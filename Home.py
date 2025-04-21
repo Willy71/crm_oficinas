@@ -3,10 +3,16 @@ import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# Autenticando com Google Sheets
+# Cargar credenciales y autorizar
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+credentials = Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
 client = gspread.authorize(credentials)
+credenciales_json = credentials
+
+# Autenticando com Google Sheets
+
+#credentials = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+#client = gspread.authorize(credentials)
 
 
 
