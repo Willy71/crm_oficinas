@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials, Credentials
+from google.oauth2.service_account  import Credentials
 
 # Cargar credenciales y autorizar
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
