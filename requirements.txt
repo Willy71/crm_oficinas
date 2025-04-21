@@ -1,4 +1,4 @@
 gspread
 pandas
-oauth2client
+google-auth-oauthlib==1.1.0
 
