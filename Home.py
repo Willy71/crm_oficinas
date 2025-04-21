@@ -13,7 +13,7 @@ SERVICE_ACCOUNT_INFO = st.secrets["gsheets"]
 SPREADSHEET_KEY = "1X6nJrJMTN_qBUJ6bV9GzLK1BVUS6hiLEExhslrfV6xs"  # Reemplazá esto por tu clave real
 SHEET_NAME = 'sheet1'  # Nombre de la hoja dentro del documento
 credentials = Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
-client = gspread.authorize(credentials)
+gc = gspread.authorize(credentials)
 credenciales_json = credentials
 
 # Autenticando com Google Sheets
