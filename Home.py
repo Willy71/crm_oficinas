@@ -4,6 +4,12 @@ import gspread
 from google.oauth2.service_account  import Credentials
 
 # Cargar credenciales y autorizar
+# Ruta al archivo de credenciales
+SERVICE_ACCOUNT_INFO = st.secrets["gsheets"]
+
+# Clave de la hoja de cálculo (la parte de la URL después de "/d/" y antes de "/edit")
+SPREADSHEET_KEY = "1X6nJrJMTN_qBUJ6bV9GzLK1BVUS6hiLEExhslrfV6xs"  # Reemplazá esto por tu clave real
+SHEET_NAME = 'sheet1'  # Nombre de la hoja dentro del documento
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 credentials = Credentials.from_service_account_info(SERVICE_ACCOUNT_INFO, scopes=SCOPES)
 client = gspread.authorize(credentials)
@@ -17,7 +23,7 @@ credenciales_json = credentials
 
 
 # Acessando a planilha
-SPREADSHEET_KEY = "1X6nJrJMTN_qBUJ6bV9GzLK1BVUS6hiLEExhslrfV6xs"  # Reemplazá esto por tu clave real
+
 sheet = client.open_by_key(SPREADSHEET_KEY).sheet1
 
 data = sheet.get_all_records()
