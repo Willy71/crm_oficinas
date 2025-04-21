@@ -77,7 +77,7 @@ df = cargar_datos(worksheet)
 # Adiciona link de WhatsApp
 def gerar_link_whatsapp(numero):
     numero_limpo = ''.join(filter(str.isdigit, str(numero)))
-    return f"https://wa.me/{numero_limpo}" if numero_limpo else ""
+    return f"https://wa.me/+55{numero_limpo}" if numero_limpo else ""
 
 df["whatsapp"] = df["phone"].apply(gerar_link_whatsapp)
 
