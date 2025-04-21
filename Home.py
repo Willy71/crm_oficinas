@@ -110,18 +110,25 @@ if estado_opcao != "Todos":
 if cidade_opcao != "Todas":
     filtro = filtro[filtro["city"] == cidade_opcao]
 
-# Mensaje con cantidad filtrada
-msg = f"Você tem {len(filtro)} contato{'s' if len(filtro) != 1 else ''}"
-if status_opcao != "Todos":
-    msg += f" {status_opcao.lower()}"
-if cidade_opcao != "Todas":
-    msg += f" na cidade de {cidade_opcao}"
-elif estado_opcao != "Todos":
-    msg += f" no estado de {estado_opcao}"
-elif pais_opcao != "Todos":
-    msg += f" no país {pais_opcao}"
+# Mensagem com quantidade filtrada
+quantidade = len(filtro)
+texto_status = f"{status_opcao.lower()}" if status_opcao != "Todos" else ""
+texto_cidade = f" na cidade de {cidade_opcao}" if cidade_opcao != "Todas" else ""
+texto_estado = f" no estado de {estado_opcao}" if estado_opcao != "Todos" else ""
+texto_pais = f" no país {pais_opcao}" if pais_opcao != "Todos" else ""
 
-st.markdown(msg)
+mensagem = f"Você tem {quantidade} contato{'s' if quantidade != 1 else ''}"
+if texto_status:
+    mensagem += f" {texto_status}"
+if texto_cidade:
+    mensagem += texto_cidade
+elif texto_estado:
+    mensagem += texto_estado
+elif texto_pais:
+    mensagem += texto_pais
+
+st.markdown(f"**{mensagem}**")
+
 
 st.markdown("### Resultados")
 for index, row in filtro.iterrows():
