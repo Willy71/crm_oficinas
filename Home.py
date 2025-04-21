@@ -57,6 +57,7 @@ def cargar_datos(worksheet):
         st.error(f"Erro ao cargar dados: {str(e)}")
         return pd.DataFrame(columns=columnas_ordenadas)
 
+columnas_ordenadas = ['name', 'address','phone', 'webpage', 'rating', 'city', 'state','country', 'status']
 # Inicializar la hoja de cálculo
 worksheet = inicializar_hoja()
 
