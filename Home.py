@@ -50,6 +50,7 @@ def cargar_datos(worksheet):
         else:
             # Convertir los registros a DataFrame
             df = pd.DataFrame(records)
+            df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce').fillna(0).astype(int)
             # Asegurarse de que la columna 'user_id' sea numérica
             #df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce').fillna(0).astype(int)
             return df
@@ -57,19 +58,19 @@ def cargar_datos(worksheet):
         st.error(f"Erro ao cargar dados: {str(e)}")
         return pd.DataFrame(columns=columnas_ordenadas)
 
-columnas_ordenadas = ['name', 'address','phone', 'webpage', 'rating', 'city', 'state','country', 'status']
+columnas_ordenadas = ['user_id', 'name', 'address','phone', 'webpage', 'rating', 'city', 'state','country', 'status']
+
+# Lista de status posibles
+status_lista = ["Novo", "Contato Feito", "Em Negociação", "Cliente", "Descartado"]
+
 # Inicializar la hoja de cálculo
 worksheet = inicializar_hoja()
 
 # Cargar datos desde Google Sheets
 df = cargar_datos(worksheet)
 
-
-
 # Acessando a planilha
-
 #sheet = client.open_by_key(SPREADSHEET_KEY).sheet1
-
 #data = sheet.get_all_records()
 #df = pd.DataFrame(data)
 
@@ -83,33 +84,58 @@ df["whatsapp"] = df["phone"].apply(gerar_link_whatsapp)
 # Interface do usuário
 st.title("CRM de Leads - Oficinas Mecânicas")
 
+with st.sidebar:
+    st.header("Filtros")
+    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].unique()))
+    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].unique()))
+    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].unique()))
+    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].unique()))
+
+    
+
 # Filtros
-status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].unique()))
-cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].unique()))
-estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].unique()))
-pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].unique()))
+#status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].unique()))
+#cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].unique()))
+#estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].unique()))
+#pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].unique()))
 
 # Aplica os filtros
 filtro = df.copy()
 if status_opcao != "Todos":
     filtro = filtro[filtro["status"] == status_opcao]
-if cidade_opcao != "Todas":
-    filtro = filtro[filtro["city"] == cidade_opcao]
-if estado_opcao != "Todos":
-    filtro = filtro[filtro["state"] == estado_opcao]
 if pais_opcao != "Todos":
     filtro = filtro[filtro["country"] == pais_opcao]
+if estado_opcao != "Todos":
+    filtro = filtro[filtro["state"] == estado_opcao]
+if cidade_opcao != "Todas":
+    filtro = filtro[filtro["city"] == cidade_opcao]
 
-# Exibe resultados
+
 st.markdown("### Resultados")
 for index, row in filtro.iterrows():
     st.markdown(f"**{row['name']}**")
     st.markdown(f"Endereço: {row['address']}")
-    st.markdown(f"Site: [{row['website']}]({row['website']})" if row['website'] else "Site: N/A")
-    st.markdown(f"Avaliação: {row['rating']}")
+    st.markdown(f"Site: [{row['webpage']}]({row['webpage']})" if row['webpage'] else "Site: N/A")
+    #st.markdown(f"Avaliação: {row['rating']}")
     st.markdown(f"Cidade: {row['city']} | Estado: {row['state']} | País: {row['country']}")
+
     if row['whatsapp']:
         st.markdown(f"[Enviar mensagem no WhatsApp]({row['whatsapp']})")
     else:
         st.markdown("WhatsApp: N/A")
+
+    novo_status = st.selectbox(f"Status de {row['name']}:", status_lista, index=status_lista.index(row['status']) if row['status'] in status_lista else 0, key=f"status_{index}")
+    # Si el status cambió, actualizamos en la hoja
+    # Si el status cambió, actualizamos en la hoja
+    if novo_status != row['status']:
+        try:
+            # Buscar el índice de la fila en la hoja
+            sheet_data = worksheet.get_all_records()
+            for i, r in enumerate(sheet_data):
+                if int(r["user_id"]) == row["user_id"]:
+                    worksheet.update_cell(i + 2, columnas_ordenadas.index("status") + 1, novo_status)
+                    st.success(f"Status atualizado para {row['name']}")
+                    break
+        except Exception as e:
+            st.error(f"Erro ao atualizar status: {str(e)}")
     st.markdown("---")
