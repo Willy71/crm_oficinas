@@ -8,8 +8,10 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 credentials = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
 client = gspread.authorize(credentials)
 
+
+
 # Acessando a planilha
-SPREADSHEET_KEY = "SUA_SPREADSHEET_KEY_AQUI"  # Reemplazá esto por tu clave real
+SPREADSHEET_KEY = "1X6nJrJMTN_qBUJ6bV9GzLK1BVUS6hiLEExhslrfV6xs"  # Reemplazá esto por tu clave real
 sheet = client.open_by_key(SPREADSHEET_KEY).sheet1
 
 data = sheet.get_all_records()
