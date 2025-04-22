@@ -1,4 +1,3 @@
 gspread
 pandas
 firebase_admin
-json
