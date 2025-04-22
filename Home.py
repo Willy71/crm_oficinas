@@ -5,7 +5,7 @@ from firebase_admin import credentials, firestore
 
 # Inicializar Firebase com as credenciais
 if not firebase_admin._apps:
-    cred = credentials.Certificate(st.secrets[firebase])
+    cred = credentials.Certificate(st.secrets["firebase"])
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
