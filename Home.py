@@ -2,14 +2,10 @@ import streamlit as st
 import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, firestore
-import json
 
-firebase_dict = json.loads(json.dumps(st.secrets["firebase"]))
-cred = credentials.Certificate(firebase_dict)
-
-# Inicializar Firebase com as credenciais
+# Inicializar Firebase desde secrets
 if not firebase_admin._apps:
-    cred = credentials.Certificate(st.secrets["firebase"])
+    cred = credentials.Certificate(dict(st.secrets["firebase"]))
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -45,10 +41,10 @@ st.title("CRM de Leads - Oficinas Mecânicas")
 
 with st.sidebar:
     st.header("Filtros")
-    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].unique()))
-    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].unique()))
-    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].unique()))
-    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].unique()))
+    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()))
+    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()))
+    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()))
+    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()))
 
 # Aplicar filtros
 filtro = df.copy()
