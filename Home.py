@@ -11,7 +11,7 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 columnas_ordenadas = ['user_id', 'name', 'address', 'phone', 'website', 'rating', 'city', 'state', 'country', 'status']
-status_lista = ["Novo", "Contato Feito", "Em Negociação", "Cliente", "Descartado"]
+status_lista = ["Novo", "Contato Feito", "Em Negociação", "Cliente", "Descartado", "Não conferido"]
 
 # Carregar leads do Firestore
 def carregar_leads():
