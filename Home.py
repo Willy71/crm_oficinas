@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, firestore
+import os
 
 # Inicializar Firebase desde secrets
 if not firebase_admin._apps:
