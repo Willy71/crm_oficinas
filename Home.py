@@ -45,7 +45,7 @@ with st.sidebar:
     status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()))
     pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()))
     estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()))
-    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()), index=["Todas"] + sorted(df["city"].dropna().unique()).index("Brusque") + 1)
+    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()))
 # Aplicar filtros
 filtro = df.copy()
 if status_opcao != "Todos":
