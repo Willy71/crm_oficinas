@@ -41,10 +41,30 @@ st.title("CRM de Leads - Oficinas Mecânicas")
 
 with st.sidebar:
     st.header("Filtros")
-    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()), index=["Todos"] + sorted(df["status"].dropna().unique()).index("Não conferido") + 1)
-    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()), index=1 if "Brasil" in df["country"].unique() else 0)
-    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()), index=["Todos"] + sorted(df["state"].dropna().unique()).index("Paraná") + 1)
-    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()), index=["Todas"] + sorted(df["city"].dropna().unique()).index("Ponta Grossa") + 1)
+    # Selección de filtros con valores predeterminados
+    status_opcao = st.selectbox(
+        "Filtrar por status:",
+        ["Todos"] + sorted(df["status"].dropna().unique()),
+        index=["Todos"] + sorted(df["status"].dropna().unique()).index("Não conferido") if "Não conferido" in df["status"].dropna().unique() else 0
+    )
+    
+    pais_opcao = st.selectbox(
+        "Filtrar por país:",
+        ["Todos"] + sorted(df["country"].dropna().unique()),
+        index=["Todos"] + sorted(df["country"].dropna().unique()).index("Brasil") if "Brasil" in df["country"].dropna().unique() else 0
+    )
+    
+    estado_opcao = st.selectbox(
+        "Filtrar por estado:",
+        ["Todos"] + sorted(df["state"].dropna().unique()),
+        index=["Todos"] + sorted(df["state"].dropna().unique()).index("Paraná") if "Paraná" in df["state"].dropna().unique() else 0
+    )
+    
+    cidade_opcao = st.selectbox(
+        "Filtrar por cidade:",
+        ["Todas"] + sorted(df["city"].dropna().unique()),
+        index=["Todas"] + sorted(df["city"].dropna().unique()).index("Ponta Grossa") if "Ponta Grossa" in df["city"].dropna().unique() else 0
+    )
 
 
 # Aplicar filtros
