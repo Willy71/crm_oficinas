@@ -41,10 +41,11 @@ st.title("CRM de Leads - Oficinas Mecânicas")
 
 with st.sidebar:
     st.header("Filtros")
-    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()))
-    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()))
-    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()))
-    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()))
+    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()), index=["Todos"] + sorted(df["status"].dropna().unique()).index("Não conferido") + 1)
+    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()), index=1 if "Brasil" in df["country"].unique() else 0)
+    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()), index=["Todos"] + sorted(df["state"].dropna().unique()).index("Paraná") + 1)
+    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()), index=["Todas"] + sorted(df["city"].dropna().unique()).index("Ponta Grossa") + 1)
+
 
 # Aplicar filtros
 filtro = df.copy()
