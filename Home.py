@@ -28,7 +28,7 @@ def atualizar_status(user_id, novo_status):
         return True
     return False
 
-# Carregar opções únicas para filtros sem carregar todos os leads
+# Carregar opções únicas para filtros
 def carregar_opcoes_unicas(campo):
     docs = db.collection("leads").select([campo]).stream()
     valores = set()
@@ -53,11 +53,11 @@ with st.sidebar:
     cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + carregar_opcoes_unicas("city"))
     aplicar_filtro = st.button("Filtrar")
 
+# Aplicar filtros só se o botão for clicado
 if aplicar_filtro:
     df = carregar_leads()
     df["whatsapp"] = df["phone"].apply(gerar_link_whatsapp)
 
-    # Aplicar filtros
     filtro = df.copy()
     if status_opcao != "Todos":
         filtro = filtro[filtro["status"] == status_opcao]
@@ -68,9 +68,14 @@ if aplicar_filtro:
     if cidade_opcao != "Todas":
         filtro = filtro[filtro["city"] == cidade_opcao]
 
+    st.session_state["dados_filtrados"] = filtro
+
+# Recuperar dados filtrados da sessão
+filtro = st.session_state.get("dados_filtrados", None)
+
+if filtro is not None and not filtro.empty:
     quantidade = len(filtro)
     st.markdown(f"**Você tem {quantidade} contato{'s' if quantidade != 1 else ''}**")
-    
     st.markdown("### Resultados")
     for index, row in filtro.iterrows():
         st.markdown(f"**{row['name']}**")
@@ -85,10 +90,12 @@ if aplicar_filtro:
         novo_status = st.selectbox(f"Status de {row['name']}:", status_lista,
                                    index=status_lista.index(row['status']) if row['status'] in status_lista else 0,
                                    key=f"status_{index}")
+
         if novo_status != row['status']:
             sucesso = atualizar_status(row["user_id"], novo_status)
             if sucesso:
                 st.success(f"Status atualizado para {row['name']}")
+                st.session_state["dados_filtrados"].at[index, "status"] = novo_status
             else:
                 st.error(f"Erro ao atualizar status de {row['name']}")
         st.markdown("---")
