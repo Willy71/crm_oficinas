@@ -85,8 +85,8 @@ if filtro is not None and not filtro.empty:
                                    index=status_lista.index(row['status']) if row['status'] in status_lista else 0,
                                    key=f"status_{index}")
 
+        user_id = row.get("user_id")
         if novo_status != row['status']:
-            user_id = row.get("user_id")
             if user_id and isinstance(user_id, str):
                 sucesso = atualizar_status(user_id, novo_status)
                 if sucesso:
@@ -96,19 +96,7 @@ if filtro is not None and not filtro.empty:
                     st.error(f"Erro ao atualizar status de {row['name']}")
             else:
                 st.warning(f"ID inválido para {row['name']}, não foi possível atualizar.")
-
-            if sucesso:
-                st.success(f"Status atualizado para {row['name']}")
-                st.session_state["dados_filtrados"].at[index, "status"] = novo_status
-            else:
-                st.error(f"Erro ao atualizar status de {row['name']}")
         st.markdown("---")
 else:
     st.info("Use os filtros à esquerda e clique em **Filtrar** para ver os resultados.")
 
-# Guardar archivo final
-#ruta_final_solucion = "/mnt/data/home_crm_solucion_final.py"
-#with open(ruta_final_solucion, "w", encoding="utf-8") as f:
-    #f.write(codigo_final)
-
-#ruta_final_solucion
