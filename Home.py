@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import firebase_admin
@@ -51,33 +50,28 @@ with st.sidebar:
     pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + carregar_opcoes_unicas("country"))
     estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + carregar_opcoes_unicas("state"))
     cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + carregar_opcoes_unicas("city"))
-    aplicar_filtro = st.button("Filtrar")
+    if st.button("Filtrar"):
+        df = carregar_leads()
+        df["whatsapp"] = df["phone"].apply(gerar_link_whatsapp)
+        if status_opcao != "Todos":
+            df = df[df["status"] == status_opcao]
+        if pais_opcao != "Todos":
+            df = df[df["country"] == pais_opcao]
+        if estado_opcao != "Todos":
+            df = df[df["state"] == estado_opcao]
+        if cidade_opcao != "Todas":
+            df = df[df["city"] == cidade_opcao]
+        st.session_state["dados_filtrados"] = df.reset_index(drop=True)
 
-# Aplicar filtros só se o botão for clicado
-if aplicar_filtro:
-    df = carregar_leads()
-    df["whatsapp"] = df["phone"].apply(gerar_link_whatsapp)
-
-    filtro = df.copy()
-    if status_opcao != "Todos":
-        filtro = filtro[filtro["status"] == status_opcao]
-    if pais_opcao != "Todos":
-        filtro = filtro[filtro["country"] == pais_opcao]
-    if estado_opcao != "Todos":
-        filtro = filtro[filtro["state"] == estado_opcao]
-    if cidade_opcao != "Todas":
-        filtro = filtro[filtro["city"] == cidade_opcao]
-
-    st.session_state["dados_filtrados"] = filtro
-
-# Recuperar dados filtrados da sessão
+# Recuperar datos da sessão
 filtro = st.session_state.get("dados_filtrados", None)
 
 if filtro is not None and not filtro.empty:
     quantidade = len(filtro)
     st.markdown(f"**Você tem {quantidade} contato{'s' if quantidade != 1 else ''}**")
     st.markdown("### Resultados")
-    for index, row in filtro.iterrows():
+    for index in range(len(filtro)):
+        row = filtro.loc[index]
         st.markdown(f"**{row['name']}**")
         st.markdown(f"Endereço: {row['address']}")
         st.markdown(f"Site: [{row['website']}]({row['website']})" if row['website'] else "Site: N/A")
@@ -101,3 +95,11 @@ if filtro is not None and not filtro.empty:
         st.markdown("---")
 else:
     st.info("Use os filtros à esquerda e clique em **Filtrar** para ver os resultados.")
+'''
+
+# Guardar archivo final
+ruta_final_solucion = "/mnt/data/home_crm_solucion_final.py"
+with open(ruta_final_solucion, "w", encoding="utf-8") as f:
+    f.write(codigo_final)
+
+ruta_final_solucion
