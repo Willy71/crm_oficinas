@@ -86,7 +86,17 @@ if filtro is not None and not filtro.empty:
                                    key=f"status_{index}")
 
         if novo_status != row['status']:
-            sucesso = atualizar_status(row["user_id"], novo_status)
+            user_id = row.get("user_id")
+            if user_id and isinstance(user_id, str):
+                sucesso = atualizar_status(user_id, novo_status)
+                if sucesso:
+                    st.success(f"Status atualizado para {row['name']}")
+                    st.session_state["dados_filtrados"].at[index, "status"] = novo_status
+                else:
+                    st.error(f"Erro ao atualizar status de {row['name']}")
+            else:
+                st.warning(f"ID inválido para {row['name']}, não foi possível atualizar.")
+
             if sucesso:
                 st.success(f"Status atualizado para {row['name']}")
                 st.session_state["dados_filtrados"].at[index, "status"] = novo_status
