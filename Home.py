@@ -95,11 +95,10 @@ if filtro is not None and not filtro.empty:
         st.markdown("---")
 else:
     st.info("Use os filtros à esquerda e clique em **Filtrar** para ver os resultados.")
-'''
 
 # Guardar archivo final
-ruta_final_solucion = "/mnt/data/home_crm_solucion_final.py"
-with open(ruta_final_solucion, "w", encoding="utf-8") as f:
-    f.write(codigo_final)
+#ruta_final_solucion = "/mnt/data/home_crm_solucion_final.py"
+#with open(ruta_final_solucion, "w", encoding="utf-8") as f:
+    #f.write(codigo_final)
 
-ruta_final_solucion
+#ruta_final_solucion
