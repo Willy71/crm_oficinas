@@ -1,4 +1,5 @@
-
+# Código mejorado para listar dinámicamente país, estado y cidade desde Firestore sin cargar todos os dados
+codigo_melhorado = '''
 import streamlit as st
 import pandas as pd
 import firebase_admin
@@ -28,6 +29,16 @@ def atualizar_status(user_id, novo_status):
         return True
     return False
 
+# Carregar opções únicas para filtros sem carregar todos os leads
+def carregar_opcoes_unicas(campo):
+    docs = db.collection("leads").select([campo]).stream()
+    valores = set()
+    for doc in docs:
+        data = doc.to_dict()
+        if campo in data and data[campo]:
+            valores.add(data[campo])
+    return sorted(valores)
+
 # Adiciona link de WhatsApp
 def gerar_link_whatsapp(numero):
     numero_limpo = ''.join(filter(str.isdigit, str(numero)))
@@ -38,9 +49,9 @@ st.title("CRM de Leads - Oficinas Mecânicas")
 with st.sidebar:
     st.header("Filtros")
     status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + status_lista)
-    pais_opcao = st.text_input("Filtrar por país:")
-    estado_opcao = st.text_input("Filtrar por estado:")
-    cidade_opcao = st.text_input("Filtrar por cidade:")
+    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + carregar_opcoes_unicas("country"))
+    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + carregar_opcoes_unicas("state"))
+    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + carregar_opcoes_unicas("city"))
     aplicar_filtro = st.button("Filtrar")
 
 if aplicar_filtro:
@@ -51,12 +62,12 @@ if aplicar_filtro:
     filtro = df.copy()
     if status_opcao != "Todos":
         filtro = filtro[filtro["status"] == status_opcao]
-    if pais_opcao:
-        filtro = filtro[filtro["country"].str.lower() == pais_opcao.lower()]
-    if estado_opcao:
-        filtro = filtro[filtro["state"].str.lower() == estado_opcao.lower()]
-    if cidade_opcao:
-        filtro = filtro[filtro["city"].str.lower() == cidade_opcao.lower()]
+    if pais_opcao != "Todos":
+        filtro = filtro[filtro["country"] == pais_opcao]
+    if estado_opcao != "Todos":
+        filtro = filtro[filtro["state"] == estado_opcao]
+    if cidade_opcao != "Todas":
+        filtro = filtro[filtro["city"] == cidade_opcao]
 
     quantidade = len(filtro)
     st.markdown(f"**Você tem {quantidade} contato{'s' if quantidade != 1 else ''}**")
@@ -84,3 +95,11 @@ if aplicar_filtro:
         st.markdown("---")
 else:
     st.info("Use os filtros à esquerda e clique em **Filtrar** para ver os resultados.")
+'''
+
+# Guardar el nuevo archivo
+ruta_final = "/mnt/data/home_crm_filtrado_listas.py"
+with open(ruta_final, "w", encoding="utf-8") as f:
+    f.write(codigo_melhorado)
+
+ruta_final
