@@ -1,5 +1,4 @@
-# Código mejorado para listar dinámicamente país, estado y cidade desde Firestore sin cargar todos os dados
-codigo_melhorado = '''
+
 import streamlit as st
 import pandas as pd
 import firebase_admin
@@ -95,11 +94,3 @@ if aplicar_filtro:
         st.markdown("---")
 else:
     st.info("Use os filtros à esquerda e clique em **Filtrar** para ver os resultados.")
-'''
-
-# Guardar el nuevo archivo
-ruta_final = "/mnt/data/home_crm_filtrado_listas.py"
-with open(ruta_final, "w", encoding="utf-8") as f:
-    f.write(codigo_melhorado)
-
-ruta_final
