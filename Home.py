@@ -42,12 +42,17 @@ st.title("CRM de Leads - Oficinas Mecânicas")
 
 with st.sidebar:
     st.header("Filtros")
-    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()))
-    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()))
-    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()))
-    cidade_opcao = st.selectbox("Filtrar por cidade:", ["Todas"] + sorted(df["city"].dropna().unique()))
-
+    status_opcao = st.selectbox("Filtrar por status:", ["Todos"] + sorted(df["status"].dropna().unique()), index=0)
+    pais_opcao = st.selectbox("Filtrar por país:", ["Todos"] + sorted(df["country"].dropna().unique()), index=0)
+    estado_opcao = st.selectbox("Filtrar por estado:", ["Todos"] + sorted(df["state"].dropna().unique()), index=0)
     
+    # Opciones de ciudad con "Brusque" seleccionado por defecto
+    cidades_opcoes = ["Todas"] + sorted(df["city"].dropna().unique())
+    cidade_default = "Brusque"
+    # Verifica si "Brusque" está en la lista, si no, usa "Todas" (índice 0)
+    cidade_index = cidades_opcoes.index(cidade_default) if cidade_default in cidades_opcoes else 0
+    cidade_opcao = st.selectbox("Filtrar por cidade:", cidades_opcoes, index=cidade_index)
+
 # Aplicar filtros
 filtro = df.copy()
 if status_opcao != "Todos":
